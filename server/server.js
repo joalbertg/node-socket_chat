@@ -3,6 +3,7 @@ const socketIO = require('socket.io');
 const http = require('http');
 const path = require('path');
 
+
 const publicPath = path.resolve(__dirname, '../public');
 const port = process.env.PORT || 3000;
 const app = express();
@@ -11,24 +12,8 @@ const server = http.createServer(app);
 app.use(express.static(publicPath));
 
 // this ithe backend communication
-const io = socketIO(server);
-
-io.on('connection', client => {
-  console.log('User connected');
-
-  client.emit('sendMessage', {
-    user: 'Admin',
-    message: 'Welcome to this application'
-  });
-
-  client.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-
-  client.on('sendMessage', message => {
-    console.log(message);
-  });
-});
+module.exports.io = socketIO(server);
+require('./socket/socket');
 
 server.listen(port, err => {
     if (err) throw new Error(err);
