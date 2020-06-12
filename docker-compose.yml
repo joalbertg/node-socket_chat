@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    build: .
+    command: sh -c "yarn start:dev"
+    volumes:
+      - .:/myapp
+    ports:
+      - 8080:3000
+
