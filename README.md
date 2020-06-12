@@ -13,7 +13,7 @@ docker-compose run app yarn
 
 Without dependencies
 ```shell
-docker-compose run app yarn add express
+docker-compose run app yarn add express socket.io
 docker-compose run app yarn add nodemon --dev
 ```
 
