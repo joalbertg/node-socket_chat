@@ -1,6 +1,8 @@
 const { io } = require('../server');
 const { Users } = require('../classes');
 
+const { createMessage } = require('../helpers');
+
 const users = new Users();
 
 io.on('connection', client => {
@@ -15,10 +17,7 @@ io.on('connection', client => {
 
     client
       .broadcast
-      .emit('userJoin', {
-        user: 'Admin',
-        message: `${user.name} is connected`
-      });
+      .emit('userJoin', createMessage('Admin', `${user.name} is connected`));
 
     client
       .broadcast
@@ -27,14 +26,17 @@ io.on('connection', client => {
     callback(null, people);
   });
 
+  client.on('createMessage', data => {
+    const user = users.person(client.id);
+    const message = createMessage(user.name, data.message);
+    client.broadcast.emit('createMessage', message);
+  });
+
   client.on('disconnect', () => {
     const user = users.deletePerson(client.id);
     client
       .broadcast
-      .emit('createMessage', {
-        user: 'Admin',
-        message: `${user.name} is disconnected`
-      });
+      .emit('createMessage', createMessage('Admin', `${user.name} is disconnected`));
     client
       .broadcast
       .emit('allUsers', users.currentPeople());

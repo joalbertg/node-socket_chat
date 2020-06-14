@@ -19,9 +19,7 @@ socket.on('connect', () => {
   });
 });
 
-socket.on('disconnect', () => printToDevices('Lost connection'));
-
-socket.on('createMessage', msg => console.log(msg.message));
-socket.on('userJoin', msg => console.log(msg.message));
+socket.on('createMessage', msg => console.log(msg));
+socket.on('userJoin', msg => console.log(msg));
 socket.on('allUsers', users => console.log(users));
 
