@@ -41,5 +41,12 @@ io.on('connection', client => {
       .broadcast
       .emit('allUsers', users.currentPeople());
   });
+
+  // private message
+  client.on('privateMessage', data => {
+    const user = users.person(client.id);
+
+    client.broadcast.to(data.to).emit('privateMessage', createMessage(user.name, data.message));
+  });
 });
 

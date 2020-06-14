@@ -23,3 +23,8 @@ socket.on('createMessage', msg => console.log(msg));
 socket.on('userJoin', msg => console.log(msg));
 socket.on('allUsers', users => console.log(users));
 
+// private message
+socket.on('privateMessage', message => {
+  console.log('Private message:', message);
+});
+
