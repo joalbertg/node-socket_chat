@@ -1,8 +1,4 @@
-# Notas:
-
-Este es un pequeño servidor de express listo para ejecutarse y servir la carpeta public en la web.
-
-Recuerden que deben de reconstruir los módulos de node con el comando
+# SockerIO Chat
 
 ### Installs
 
@@ -21,5 +17,34 @@ docker-compose run app yarn add nodemon --dev
 
 ```shell
 docker-compose up
+```
+
+### Project Structure
+
+> run `tree -I "node_modules"`
+```shell
+.
+├── Dockerfile
+├── README.md
+├── docker-compose.yml
+├── package.json
+├── public
+│   ├── chat.html
+│   ├── index.html
+│   └── js
+│       └── socket-chat.js
+├── server
+│   ├── classes
+│   │   ├── index.js
+│   │   └── users.js
+│   ├── helpers
+│   │   ├── index.js
+│   │   └── message.js
+│   ├── server.js
+│   └── socket
+│       └── socket.js
+└── yarn.lock
+
+6 directories, 14 files
 ```
 
