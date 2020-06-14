@@ -19,8 +19,16 @@ socket.on('connect', () => {
   });
 });
 
-socket.on('createMessage', msg => console.log(msg));
-socket.on('userJoin', msg => console.log(msg));
+socket.on('createMessage', msg => {
+  renderToMessages(msg);
+  scrollBottom();
+});
+
+socket.on('userJoin', msg => {
+  renderToMessages(msg);
+  scrollBottom();
+});
+
 socket.on('allUsers', users => renderToUsers(users));
 
 // private message

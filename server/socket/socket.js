@@ -31,13 +31,14 @@ io.on('connection', client => {
     callback(null, people);
   });
 
-  client.on('createMessage', data => {
+  client.on('createMessage', (data, callback) => {
     const user = users.person(client.id);
     const message = createMessage(user.name, data.message);
     client
       .broadcast
       .to(user.room)
       .emit('createMessage', message);
+    callback(null, message);
   });
 
   client.on('disconnect', () => {
