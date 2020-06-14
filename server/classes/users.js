@@ -19,10 +19,10 @@ class Users {
   peoplePerRoom = room => { /**/ };
 
   deletePerson = id => {
-    const person = person(id);
+    const person = this.person(id);
 
     this.people = this.people.filter(person => person.id != id);
-    return true;
+    return person;
   }
 }
 
