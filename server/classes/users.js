@@ -3,11 +3,11 @@ class Users {
     this.people = [];
   }
 
-  addUser = (id, name) => {
-    const person = { id, name };
+  addUser = (id, name, room) => {
+    const person = { id, name, room };
 
     this.people.push(person);
-    return this.people;
+    return this.peoplePerRoom(room);
   }
 
   person = id => {
@@ -16,7 +16,9 @@ class Users {
   }
 
   currentPeople = () => this.people;
-  peoplePerRoom = room => { /**/ };
+  peoplePerRoom = room => {
+    return this.people.filter(person => person.room === room);
+  };
 
   deletePerson = id => {
     const person = this.person(id);

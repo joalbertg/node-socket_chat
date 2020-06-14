@@ -6,22 +6,27 @@ const { createMessage } = require('../helpers');
 const users = new Users();
 
 io.on('connection', client => {
-  client.on('joinChat', (user, callback) => {
-    if (!user.name) {
+  client.on('joinChat', (data, callback) => {
+    if (!data.name || !data.room) {
       return callback({
         error: true,
-        message: 'Requiered name'
+        message: 'Requiered name/room'
       });
     }
-    const people = users.addUser(client.id, user.name);
+
+    client.join(data.room);
+
+    const people = users.addUser(client.id, data.name, data.room);
 
     client
       .broadcast
-      .emit('userJoin', createMessage('Admin', `${user.name} is connected`));
+      .to(data.room)
+      .emit('userJoin', createMessage('Admin', `${data.name} is connected`));
 
     client
       .broadcast
-      .emit('allUsers', users.currentPeople());
+      .to(data.room)
+      .emit('allUsers', users.peoplePerRoom(data.room));
 
     callback(null, people);
   });
@@ -29,17 +34,25 @@ io.on('connection', client => {
   client.on('createMessage', data => {
     const user = users.person(client.id);
     const message = createMessage(user.name, data.message);
-    client.broadcast.emit('createMessage', message);
+    client
+      .broadcast
+      .to(user.room)
+      .emit('createMessage', message);
   });
 
   client.on('disconnect', () => {
     const user = users.deletePerson(client.id);
-    client
-      .broadcast
-      .emit('createMessage', createMessage('Admin', `${user.name} is disconnected`));
-    client
-      .broadcast
-      .emit('allUsers', users.currentPeople());
+
+    if (user) {
+      client
+        .broadcast
+        .to(user.room)
+        .emit('createMessage', createMessage('Admin', `${user.name} is disconnected`));
+      client
+        .broadcast
+        .to(user.room)
+        .emit('allUsers', users.peoplePerRoom(user.room));
+    }
   });
 
   // private message
